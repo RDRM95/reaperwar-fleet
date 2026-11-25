@@ -4,16 +4,27 @@ Newest state only. Older entries move to docs/history/. Limit 150 lines (CI enfo
 
 ## State (2026-11-25)
 
-**M0, scale probe: built, tested in the container, awaiting the first run on the RTX 5090.**
+**M0, scale probe: done and deployed. Awaiting the first run on the RTX 5090.**
+**M1: documents and hull work under way; the combat simulation is not written yet.**
 
-- Play: https://rdrm95.github.io/reaperwar-fleet/ (Chrome or Edge)
+- Play: https://rdrm95.github.io/reaperwar-fleet/ (Chrome or Edge). The deploy job
+  succeeded; the same build was checked from a sub-path locally because this container
+  cannot reach github.io.
 - Benchmark: add `?bench=5000` (or 1000, 2000), optional `&res=3840x2160&quality=ultra&secs=20&seed=1`,
   or use the buttons in the menu. It prints a text block to paste back.
-- What is in M0: deterministic simulation kernel in a worker (formations, steering, spacing,
-  target scan), custom WebGPU renderer (instanced hulls with two levels of detail, far-range
-  glints, engine flares, star field, HDR, bloom), fleet overview and ship-follow cameras,
-  benchmark, CI and deployment. Two Alliance hulls (frigate, cruiser) built from the mesh kit.
-- Not in M0: weapons, damage, selection and orders, Reapers, Earth, sound. That is M1.
+- In M0: deterministic simulation kernel in a worker (formations, steering, spacing, target
+  scan), custom WebGPU renderer (instanced hulls with two levels of detail, far-range glints,
+  engine flares, star field, HDR, bloom), fleet overview and ship-follow cameras, benchmark,
+  hull viewer and reference-sheet renderer, CI and deployment.
+- M1 so far: lore bible (Alliance, Reapers; from search snippets), design bible, combat model
+  document (docs/COMBAT_MODEL.md), simulation table types (packages/sim/src/tables.ts).
+  Two hull builders were started in separate worktrees (Alliance: fighter, frigate, cruiser
+  at 707 m, dreadnought, carrier; Reapers: Oculus, destroyer, Sovereign-class); their
+  branches are local and not yet reviewed or merged.
+- **Where it stopped:** while writing the M1 simulation (damage layers, mounts, fire control,
+  battlegroup roles, orders, events) the session's safety filter interrupted the response
+  twice. The half-written file was discarded; `packages/sim/src/world.ts` is the M0 kernel.
+  Nothing of M1's simulation, catalogue, scenario, selection, effects or measures exists yet.
 
 ## Measured
 
@@ -43,10 +54,12 @@ Each item lists the default already in use; nothing is blocked on an answer.
 3. **NOVA Array yield:** using 200 Gt and eight rounds from the brief, not the old
    reference's 107 kt.
 4. **Chrome or Edge only** (WebGPU, no fallback). Default: yes.
+5. **The interrupted simulation work.** Default: the next session resumes it from
+   docs/COMBAT_MODEL.md; say so if you want it approached differently.
 
 ## Next
 
-M1 in this order: design bible and combat model; catalogue with sourced figures; weapons,
-damage, fire control and battlegroup roles in the simulation; eight hulls with reference
-sheets; Earth-orbit battle space; selection and orders; effects; the engagement measures;
-independent review into docs/qa/.
+M1, in this order: review and merge the hull branches; catalogue with sourced figures
+(lengths and gap proposals are in the lore bible, section 5); the simulation described in
+docs/COMBAT_MODEL.md; Earth-orbit battle space; selection and orders; effects; the
+engagement measures; independent review into docs/qa/.
