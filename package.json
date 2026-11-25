@@ -8,11 +8,11 @@
     "build": "vite build --config apps/game/vite.config.ts",
     "preview": "vite preview --config apps/game/vite.config.ts --port 4173 --strictPort",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "eslint packages apps tools tests",
+    "lint": "eslint .",
     "test": "vitest run",
     "sim": "tsx tools/headless.ts",
     "measures": "tsx tools/measures.ts",
-    "test:browser": "playwright test",
+    "test:browser": "xvfb-run -a -s \"-screen 0 1600x900x24\" playwright test --trace off",
     "check:docs": "tsx tools/check-docs.ts"
   },
   "devDependencies": {

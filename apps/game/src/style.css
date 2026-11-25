@@ -1,0 +1,27 @@
+:root { color-scheme: dark; --ink: #cfe3ff; --dim: #7f93b3; --line: #2b4470; --panel: rgba(8, 14, 26, 0.82); --accent: #5fb0ff; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font: 13px/1.4 "Segoe UI", system-ui, sans-serif; color: var(--ink); }
+#view { position: fixed; inset: 0; width: 100vw; height: 100vh; display: block; outline: none; cursor: crosshair; touch-action: none; }
+/* The interface layer never takes pointer events itself; only its panels do, so the battle always receives the mouse. */
+#ui { position: fixed; inset: 0; pointer-events: none; user-select: none; }
+#ui .panel { pointer-events: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 3px; }
+#ui.hidden > :not(.always) { display: none; }
+#hud { position: absolute; left: 12px; top: 10px; padding: 8px 12px; min-width: 250px; font-variant-numeric: tabular-nums; }
+#hud h1 { margin: 0 0 4px; font-size: 13px; letter-spacing: 0.14em; font-weight: 600; color: var(--accent); }
+#hud .row { display: flex; justify-content: space-between; gap: 18px; color: var(--dim); }
+#hud .row b { color: var(--ink); font-weight: 500; }
+#menu { position: absolute; right: 12px; top: 10px; padding: 10px 12px; width: 230px; }
+#menu h2 { margin: 0 0 6px; font-size: 11px; letter-spacing: 0.16em; color: var(--dim); font-weight: 600; }
+#menu label { display: flex; justify-content: space-between; align-items: center; margin: 4px 0; color: var(--dim); }
+#menu select, #menu input, button { background: #0d1a30; color: var(--ink); border: 1px solid var(--line); border-radius: 2px; padding: 3px 6px; font: inherit; }
+#menu input { width: 78px; }
+button { cursor: pointer; padding: 5px 10px; }
+button:hover { border-color: var(--accent); }
+#menu button { width: 100%; margin-top: 6px; }
+#hint { position: absolute; left: 12px; bottom: 10px; color: var(--dim); text-shadow: 0 1px 2px #000; }
+#report { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 14px 16px; max-width: min(92vw, 900px); }
+#report pre { margin: 0 0 10px; font: 12px/1.45 ui-monospace, Consolas, monospace; white-space: pre-wrap; user-select: text; color: #d7e6ff; max-height: 70vh; overflow: auto; }
+#report .buttons { display: flex; gap: 8px; justify-content: flex-end; }
+#progress { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); padding: 6px 14px; }
+#fatal { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: auto; }
+#fatal div { max-width: 520px; padding: 18px 22px; }
+#menu h2.gap { margin-top: 10px; }
