@@ -13,7 +13,8 @@
     "sim": "tsx tools/headless.ts",
     "measures": "tsx tools/measures.ts",
     "test:browser": "xvfb-run -a -s \"-screen 0 1600x900x24\" playwright test --trace off",
-    "check:docs": "tsx tools/check-docs.ts"
+    "check:docs": "tsx tools/check-docs.ts",
+    "sheets": "npm run build && xvfb-run -a -s \"-screen 0 1700x900x24\" node tools/sheets.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

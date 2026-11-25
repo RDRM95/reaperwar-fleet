@@ -6,8 +6,8 @@
 import { MeshBuilder, octRing, ovalRing, translate, type Mat, type V3 } from './kit';
 import type { HullDef } from './types';
 
-const PLATE: Mat = { color: [0.6, 0.63, 0.68] };
-const PLATE_HI: Mat = { color: [0.72, 0.75, 0.8] };
+const PLATE: Mat = { color: [0.5, 0.53, 0.58] };
+const PLATE_HI: Mat = { color: [0.62, 0.65, 0.7] };
 const BELLY: Mat = { color: [0.1, 0.12, 0.16], kind: 1 };
 const TRIM: Mat = { color: [0.2, 0.23, 0.29], kind: 1 };
 const STRIPE: Mat = { color: [0.07, 0.2, 0.55] };
@@ -46,8 +46,8 @@ function nacelle(b: MeshBuilder, x: number, y: number, zFront: number, zBack: nu
       { capEnd: false },
     );
   });
-  // Recessed glowing exhaust.
-  b.loft([ovalRing(zBack, r * 0.8, r * 0.8, sides, x, y), ovalRing(zBack + r * 0.6, r * 0.55, r * 0.55, sides, x, y)], ENGINE, { capStart: false });
+  // Glowing exhaust plug.
+  b.loft([ovalRing(zBack, r * 0.72, r * 0.72, sides, x, y), ovalRing(zBack - r * 0.25, r * 0.5, r * 0.5, sides, x, y)], ENGINE, { capStart: false });
 }
 
 /** Flat swept wing from a root chord on the hull to a tip chord outboard. */
@@ -112,7 +112,7 @@ function buildFrigate(detail: 0 | 1): ReturnType<MeshBuilder['build']> {
   });
   // Stern engine block with two inboard exhausts.
   b.loft([octRing(-79, 5.5, 4.2, 0.34, 0, 0.6), octRing(-85, 4.6, 3.4, 0.34, 0, 0.6)], TRIM, { capStart: false });
-  b.mirrorX(() => b.loft([ovalRing(-85.2, 1.7, 2.2, 8, 2.2, 0.6), ovalRing(-84.6, 1.4, 1.9, 8, 2.2, 0.6)], ENGINE));
+  b.mirrorX(() => b.loft([ovalRing(-84.4, 1.7, 2.2, 8, 2.2, 0.6), ovalRing(-85, 1.4, 1.9, 8, 2.2, 0.6)], ENGINE));
   return b.build();
 }
 
@@ -151,7 +151,7 @@ function buildCruiser(detail: 0 | 1): ReturnType<MeshBuilder['build']> {
     wing(b, { x: 30, y: -1, z0: 40, z1: -14, t: 6 }, { x: 60, y: -4, z0: 20, z1: -20, t: 4.5 }, PLATE);
     wing(b, { x: 34, y: -1, z0: -110, z1: -170, t: 7 }, { x: 60, y: -4, z0: -110, z1: -158, t: 5 }, PLATE);
     nacelle(b, 70, -4, -196, -252, 9.5, sides);
-    nacelle(b, 13, 3, -238, -260, 9, sides);
+    nacelle(b, 13, 3, -236, -257.7, 9, sides);
     // Wing-tip fin.
     wing(b, { x: 82, y: -4, z0: -60, z1: -140, t: 3 }, { x: 108, y: -9, z0: -116, z1: -160, t: 1.4 }, PLATE);
     if (detail === 0) {
