@@ -17,10 +17,14 @@ Newest state only. Older entries move to docs/history/. Limit 150 lines (CI enfo
   engine flares, star field, HDR, bloom), fleet overview and ship-follow cameras, benchmark,
   hull viewer and reference-sheet renderer, CI and deployment.
 - M1 so far: lore bible (Alliance, Reapers; from search snippets), design bible, combat model
-  document (docs/COMBAT_MODEL.md), simulation table types (packages/sim/src/tables.ts).
-  Two hull builders were started in separate worktrees (Alliance: fighter, frigate, cruiser
-  at 707 m, dreadnought, carrier; Reapers: Oculus, destroyer, Sovereign-class); their
-  branches are local and not yet reviewed or merged.
+  document (docs/COMBAT_MODEL.md), simulation table types (packages/sim/src/tables.ts), and
+  **all eight M1 hulls**, built in code with reference sheets in docs/design/sheets/:
+  Alliance fighter 15 m, frigate 170 m, cruiser 707 m, dreadnought 888 m, carrier 900 m;
+  Reaper Oculus 16 m, destroyer 160 m, Sovereign-class 2,000 m. View any of them at
+  `?hull=<id>&view=quarter` (ids as the sheet file names). They are not yet used in a battle.
+- Hull shortcomings I can see on the sheets: Sovereign-class arms are thin for a 2 km ship;
+  the Oculus sphere is faceted; the cruiser's outriggers are long needles; the carrier's
+  hangar tunnel is see-through at its centre.
 - **Where it stopped:** while writing the M1 simulation (damage layers, mounts, fire control,
   battlegroup roles, orders, events) the session's safety filter interrupted the response
   twice. The half-written file was discarded; `packages/sim/src/world.ts` is the M0 kernel.
@@ -35,7 +39,7 @@ Newest state only. Older entries move to docs/history/. Limit 150 lines (CI enfo
 | Determinism, in-game worker vs headless | identical for 120 ticks, 600 ships, seed 11 | browser test |
 | Real input (right-drag, wheel, middle-drag, keys, menu) | reaches the battle through the interface layer | browser test, real pointer events |
 | Drawn output | not blank, both fleet colours present, framed, no console errors | software rendering |
-| Hull lengths | frigate 170 m, cruiser 520 m, match their definitions | unit test |
+| Hull lengths | all eight hulls build to their catalogue length; none fills over 45 % of its box | unit tests |
 | Frame rate, 4K, Ultra | **not measured** | needs the 5090 |
 | Engagement share, Reaper-killer discipline | not applicable until weapons exist (M1) | |
 
@@ -59,7 +63,7 @@ Each item lists the default already in use; nothing is blocked on an answer.
 
 ## Next
 
-M1, in this order: review and merge the hull branches; catalogue with sourced figures
+M1, in this order: catalogue with sourced figures
 (lengths and gap proposals are in the lore bible, section 5); the simulation described in
 docs/COMBAT_MODEL.md; Earth-orbit battle space; selection and orders; effects; the
 engagement measures; independent review into docs/qa/.
