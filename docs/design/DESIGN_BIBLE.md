@@ -38,7 +38,7 @@ games' Codex (see docs/lore/LORE_BIBLE.md for sources), **[house]** = this proje
 - **Class signatures:**
   - *Fighter (about 15 m):* twin-boom dart, forward-swept wings, one engine.
   - *Frigate (about 170 m):* arrowhead, two wing nacelles, tall thin fin. Fast and narrow.
-  - *Cruiser (about 520 m):* spear hull with an armoured prow collar, two outrigger hulls on
+  - *Cruiser (707 m, inferred):* spear hull with an armoured prow collar, two outrigger hulls on
     paired pylons, stepped bridge tower, visible broadside turret row.
   - *Dreadnought (888 m):* a slab-sided keel built round the gun, with a forked prow that
     frames the muzzle, four outriggers, three broadside decks **[canon: three decks]**.
@@ -101,5 +101,5 @@ that suggest a living thing, and no visible way in. [house, from canon descripti
 
 One image per hull in `docs/design/sheets/`, rendered by `npm run sheets` from the built
 mesh: six orthographic views, a three-quarter view, and the hull beside the standard
-Alliance cruiser (520 m) for scale. They are software-rendered; colour and exposure on real
+Alliance cruiser (707 m) for scale. They are software-rendered; colour and exposure on real
 hardware should match, fine shading may differ.
