@@ -1,0 +1,32 @@
+{
+  "name": "reaperwar-fleet",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config apps/game/vite.config.ts",
+    "build": "vite build --config apps/game/vite.config.ts",
+    "preview": "vite preview --config apps/game/vite.config.ts --port 4173 --strictPort",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint packages apps tools tests",
+    "test": "vitest run",
+    "sim": "tsx tools/headless.ts",
+    "measures": "tsx tools/measures.ts",
+    "test:browser": "playwright test",
+    "check:docs": "tsx tools/check-docs.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^26.6.10",
+    "@types/pngjs": "^6.0.5",
+    "@webgpu/types": "^0.1.74",
+    "eslint": "^10.15.0",
+    "playwright": "1.63.0",
+    "pngjs": "^7.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.74.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.2"
+  }
+}
