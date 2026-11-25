@@ -9,7 +9,7 @@ const page = await browser.newPage({ viewport: { width: 1600, height: 900 }, dev
 const logs = [];
 page.on('console', (m) => logs.push(`[${m.type()}] ${m.text()}`));
 page.on('pageerror', (e) => logs.push(`[pageerror] ${e.message}`));
-await page.goto(`http://localhost:4173/?${query}`);
+await page.goto(`${process.env.BASE_URL ?? "http://localhost:4173/"}?${query}`);
 await page.waitForFunction(() => window.__rw && (window.__rw.ready || window.__rw.error), null, { timeout: 60000 }).catch(() => logs.push('timeout waiting for ready'));
 await page.waitForTimeout(Number(waitMs));
 if (script) await page.evaluate(script);
