@@ -82,7 +82,7 @@ fn plating(local: vec3f, n: vec3f, seed: f32) -> vec2f {
   let glow = i.color.a;
   if (glow > 0.0) {
     let engine = step(0.9, glow);
-    let power = mix(2.2, 2.0 + 7.0 * i.misc.x, engine);
+    let power = mix(2.2, 1.2 + 3.2 * i.misc.x, engine);
     col += i.color.rgb * glow * power;
   }
   return vec4f(col, 1.0);

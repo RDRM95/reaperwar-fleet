@@ -10,7 +10,7 @@ import type { GroupSpawn, ShipClass, WorldConfig } from './world';
 
 export const PROBE_CLASSES: ShipClass[] = [
   { id: 'probe_frigate', lengthM: 170, radius: 110, maxSpeed: 900, accel: 60, turnRate: 0.5, sensorRange: 60000 },
-  { id: 'probe_cruiser', lengthM: 520, radius: 320, maxSpeed: 600, accel: 30, turnRate: 0.25, sensorRange: 90000 },
+  { id: 'probe_cruiser', lengthM: 707, radius: 420, maxSpeed: 600, accel: 30, turnRate: 0.25, sensorRange: 90000 },
 ];
 
 export function probeScenario(shipCount: number, seed: number): WorldConfig {
