@@ -32,8 +32,25 @@ describe.each(HULLS.map((h) => [h.id, h] as const))('%s', (_id, hull) => {
     }
   });
 
-  it('has engines at the stern', () => {
-    expect(hull.engines.length).toBeGreaterThan(0);
+  it('has its engines, if it declares any, at the stern', () => {
+    // Reapers show no engines and declare an empty list; every other navy must have some.
+    if (!hull.id.startsWith('reaper_')) expect(hull.engines.length).toBeGreaterThan(0);
     for (const e of hull.engines) expect(e.pos[2]).toBeLessThan(-hull.lengthM * 0.3);
+  });
+});
+
+describe.each(HULLS.filter((h) => h.id.startsWith('reaper_')).map((h) => [h.id, h] as const))('%s inner light', (_id, hull) => {
+  it.each([0, 1] as const)('has some glowing vertices at detail %i, none bright enough to count as engine light', (detail) => {
+    const mesh = hull.build(detail);
+    let lit = 0, brightest = 0;
+    for (let i = 3; i < mesh.colors.length; i += 4) {
+      if (mesh.colors[i] > 0) lit++;
+      brightest = Math.max(brightest, mesh.colors[i]);
+    }
+    expect(lit).toBeGreaterThan(0);
+    // Glow is kept small and deliberate: seams and eyes, not whole plates.
+    expect(lit / (mesh.colors.length / 4)).toBeLessThan(0.2);
+    // The renderer drives glow >= 0.9 by engine throttle.
+    expect(brightest / 255).toBeLessThan(0.9);
   });
 });

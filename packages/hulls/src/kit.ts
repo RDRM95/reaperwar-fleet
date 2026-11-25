@@ -240,3 +240,62 @@ export const yawY = (deg: number) => {
   const c = Math.cos((deg * Math.PI) / 180), s = Math.sin((deg * Math.PI) / 180);
   return (p: V3): V3 => [p[0] * c + p[2] * s, p[1], -p[0] * s + p[2] * c];
 };
+
+/**
+ * Point at `t` (0..1) on a smooth curve through `pts` (uniform Catmull-Rom:
+ * the curve passes through every control point, t = k / (pts.length - 1) at point k).
+ */
+export function curvePoint(pts: V3[], t: number): V3 {
+  const n = pts.length - 1;
+  const x = Math.max(0, Math.min(1, t)) * n;
+  const i = Math.min(n - 1, Math.floor(x));
+  const f = x - i, f2 = f * f, f3 = f2 * f;
+  const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(n, i + 2)];
+  const at = (d: number) =>
+    0.5 * (2 * p1[d] + (p2[d] - p0[d]) * f + (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * f2 + (3 * p1[d] - p0[d] - 3 * p2[d] + p3[d]) * f3);
+  return [at(0), at(1), at(2)];
+}
+
+/**
+ * Rings for a tapering tube swept along `path` (curved limbs, horns, cables):
+ * ring k is centred on path[k] and lies square to the path there, so the result
+ * can be passed straight to `MeshBuilder.loft`. `size(t, k)` gives the half
+ * extents [across, along-up] at point k (t = k / (path.length - 1)). `up` fixes
+ * the roll of the first ring and is carried along the path without twisting.
+ * Each ring starts on its "down" side and runs like `ovalRing` (for a path
+ * along +Z with up = +Y the two give the same ring).
+ */
+export function sweepRings(path: V3[], size: (t: number, k: number) => [number, number], sides = 10, up: V3 = [0, 1, 0]): V3[][] {
+  const last = path.length - 1;
+  const unit = (v: V3): V3 => {
+    const l = Math.hypot(v[0], v[1], v[2]) || 1;
+    return [v[0] / l, v[1] / l, v[2] / l];
+  };
+  let u: V3 = unit(up);
+  const rings: V3[][] = [];
+  for (let k = 0; k <= last; k++) {
+    const a = path[Math.max(0, k - 1)], c = path[Math.min(last, k + 1)];
+    const t = unit([c[0] - a[0], c[1] - a[1], c[2] - a[2]]);
+    // Carry the up vector along: drop its component along the path, keep the rest.
+    let d = u[0] * t[0] + u[1] * t[1] + u[2] * t[2];
+    let v: V3 = [u[0] - t[0] * d, u[1] - t[1] * d, u[2] - t[2] * d];
+    if (Math.hypot(v[0], v[1], v[2]) < 1e-6) {
+      // Up lies along the path: fall back to whichever axis is most square to it.
+      const alt: V3 = Math.abs(t[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
+      d = alt[0] * t[0] + alt[1] * t[1] + alt[2] * t[2];
+      v = [alt[0] - t[0] * d, alt[1] - t[1] * d, alt[2] - t[2] * d];
+    }
+    u = unit(v);
+    const s: V3 = [u[1] * t[2] - u[2] * t[1], u[2] * t[0] - u[0] * t[2], u[0] * t[1] - u[1] * t[0]];
+    const [hw, hh] = size(last === 0 ? 0 : k / last, k);
+    const p = path[k];
+    const ring: V3[] = [];
+    for (let i = 0; i < sides; i++) {
+      const ang = (i / sides) * Math.PI * 2 - Math.PI / 2;
+      const cx = Math.cos(ang) * hw, cy = Math.sin(ang) * hh;
+      ring.push([p[0] + s[0] * cx + u[0] * cy, p[1] + s[1] * cx + u[1] * cy, p[2] + s[2] * cx + u[2] * cy]);
+    }
+    rings.push(ring);
+  }
+  return rings;
+}
