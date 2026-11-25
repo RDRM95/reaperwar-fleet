@@ -82,6 +82,8 @@ export class Renderer {
   height = 1;
   /** Counters for the last frame. */
   stats = { drawCalls: 0, hulls: 0, glints: 0, sprites: 0, triangles: 0, gpuMs: -1 };
+  /** Draw a flat studio background instead of the sky (hull viewer and reference sheets). */
+  plainBackground = false;
 
   private ctx: GPUCanvasContext;
   private canvasFormat: GPUTextureFormat;
@@ -378,7 +380,7 @@ export class Renderer {
     g.set([cam.right[0], cam.right[1], cam.right[2], aspect / focal], 12);
     g.set([cam.up[0], cam.up[1], cam.up[2], 1 / focal], 16);
     g.set([sunDir[0], sunDir[1], sunDir[2], time], 20);
-    g.set([1.9, 1.82, 1.7, 0.9], 24);
+    g.set([1.45, 1.4, 1.32, 0.9], 24);
     g.set([this.width, this.height, (this.height * focal) / 2, 1.0], 28);
     d.queue.writeBuffer(this.globals, 0, g);
     d.queue.writeBuffer(this.postParams[BLOOM_LEVELS * 2], 0, new Float32Array([0, 0, 1.0, q.bloom ? 0.55 : 0]));
@@ -408,17 +410,19 @@ export class Renderer {
     const scenePass = enc.beginRenderPass({
       colorAttachments: [
         this.sceneMs
-          ? { view: this.sceneMs.createView(), resolveTarget: this.scene.createView(), loadOp: 'clear', storeOp: 'discard', clearValue: [0, 0, 0, 1] }
-          : { view: this.scene.createView(), loadOp: 'clear', storeOp: 'store', clearValue: [0, 0, 0, 1] },
+          ? { view: this.sceneMs.createView(), resolveTarget: this.scene.createView(), loadOp: 'clear', storeOp: 'discard', clearValue: this.plainBackground ? [0.035, 0.045, 0.06, 1] : [0, 0, 0, 1] }
+          : { view: this.scene.createView(), loadOp: 'clear', storeOp: 'store', clearValue: this.plainBackground ? [0.035, 0.045, 0.06, 1] : [0, 0, 0, 1] },
       ],
       depthStencilAttachment: { view: this.depth.createView(), depthClearValue: 0, depthLoadOp: 'clear', depthStoreOp: 'discard' },
       timestampWrites: useQuery ? { querySet: this.querySet!, beginningOfPassWriteIndex: 0, endOfPassWriteIndex: 1 } : undefined,
     });
     let draws = 0, tris = 0;
     scenePass.setBindGroup(0, this.globalsBind);
-    scenePass.setPipeline(this.skyPipe);
-    scenePass.draw(3);
-    draws++;
+    if (!this.plainBackground) {
+      scenePass.setPipeline(this.skyPipe);
+      scenePass.draw(3);
+      draws++;
+    }
     if (drawn > 0) {
       scenePass.setPipeline(this.meshPipe);
       scenePass.setVertexBuffer(1, this.instanceBuf);

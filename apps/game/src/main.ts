@@ -7,6 +7,7 @@ import { QUALITY, Renderer, type QualityName } from './render/renderer';
 import { SceneBuilder } from './scene';
 import { SimClient, type SimStatic } from './simClient';
 import { Ui } from './ui';
+import { runViewer } from './viewer';
 
 declare const __BUILD__: string;
 
@@ -238,4 +239,5 @@ async function start(): Promise<void> {
   requestAnimationFrame(frame);
 }
 
-start();
+if (params.has('hull')) runViewer(params);
+else start();
